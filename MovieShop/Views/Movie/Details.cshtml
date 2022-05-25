@@ -1,0 +1,126 @@
+﻿@using Application_Core.Entities
+@model Application_Core.Models.MovieDetailsModel
+
+<div class="container-fluid" style="margin:0px">
+    <div class="row" style="background-image:url(@Model.BackdropUrl)">
+        <div class="col-4"> 
+            <img src = "@Model.PosterUrl" class="float-end" >
+        </div>
+        <div class="col-4" style="color:white">
+            <div class="row">
+                <p class="text-start fw-bolder mb-2" style="font-size:25px; font-style:">
+                    @Model.Title
+                </p>
+            </div>
+            <div class="row">
+                    <p class="text-start mb-2" style="font-size:6px">
+                        @Model.Tagline
+                    </p>
+            </div>            
+            <div class="row">
+                <div class="col-4">
+                    <p class="text-start mb-2" style="font-size:10px">
+                        @Model.RunTime m| @Model.ReleaseDate.Value.ToString("yyyy")
+                    </p>
+                </div>
+                <div class="col-8" style="font-size:8px">
+                    <ul class="list-inline">
+                    @foreach(var Genre in Model.Genres)
+                    {
+                       <li class="list-inline-item" style="background-color:gray; border-radius:5px; padding:2px; margin-right:3px">@Genre.Name</li> 
+                    }
+                    </ul>
+                </div>
+            </div>
+            <div class="row">
+                <p><span class="badge bg-success">@Model.Rating</span></p>
+            </div>
+            <div>
+                    <p class="text-start mb-2" style="font-size:10px">
+                        @Model.Overview
+                    </p>
+            </div>
+            
+        </div>
+        @if (User.Identity.IsAuthenticated)
+        {
+            <div class="col">
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    Review
+                </button>
+            
+                <br>
+            
+                <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#buyMovieModel">
+                    BUY $@Model.Price
+                </button>
+            
+                <br>
+            
+                <button type="button" class="btn btn-default btn-sm" onclick="AddFavorite(@Model.Id)">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
+                        <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>
+                    </svg>
+                    Favorite
+                
+                    <script>
+                    function AddFavorite(movieId) {
+                        xmlhttp = new XMLHttpRequest();
+                        xmlhttp.open("POST", "/User/AddFavorite", true);
+                        var FD = new FormData();
+                        FD.append("movieId", movieId);
+ 
+                        xmlhttp.send(FD);
+                    }
+                </script>
+                </button>
+            
+                <partial name="_ReviewModal"/>
+                <partial name="_PurchaseModal"/>
+            
+            </div>
+        }
+    </div>
+    <div class="row">
+        <div class="col-4">
+            <div class="row">
+                <p>
+                    MOVIE FACTS
+                </p>
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item">Released Date <span class="badge rounded-pill bg-secondary">@Model.ReleaseDate.Value.ToString("MMMM dd, yyyy")</span></li>
+                  <li class="list-group-item">Run Time <span class="badge rounded-pill bg-secondary">@Model.RunTime</span></li>
+                  <li class="list-group-item">Box Office <span class="badge rounded-pill bg-secondary">@Model.Revenue</span></li>
+                  <li class="list-group-item">Budget <span class="badge rounded-pill bg-secondary">@Model.Budget</span></li>
+                  <li class="list-group-item"></li>
+                </ul>
+            </div>
+            <div class="row">
+                <p>
+                    TRAILERS
+                </p>
+                <ul class="list-group list-group-flush">
+                    @foreach(var trailer in Model.Trailers)
+                    {
+                        <a href="@trailer.TrailerUrl" class="list-group-item list-group-item-action">@trailer.Name</a>
+                    }
+
+                </ul>
+            </div>
+        </div>
+        <div class="col-8">
+            <p>
+                MOVIE FACTS
+            </p>
+            @foreach(var cast in Model.Casts)
+            {
+                <ul class="list-group list-group-horizontal">
+                    <li class="list-group-item col-2 border-start-0 border-end-0"><img src="@cast.ProfilePath" style="border-radius:50%; height:50px; width:50px" /></li>
+                    <li class="list-group-item col-5 border-start-0 border-end-0">@cast.Name</li>
+                    <li class="list-group-item col-5 border-start-0 border-end-0">@cast.Character</li>
+                </ul>
+            }
+        </div>
+    </div>
+</div>

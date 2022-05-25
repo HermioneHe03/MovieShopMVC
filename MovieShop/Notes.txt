@@ -1,0 +1,200 @@
+MVC -> Model View Controller
+
+Model
+View
+Controller -> a C# class that inhertis from Controller class
+		-> Many Action methods
+
+https://localhost:7033/home/index
+return View() will return the view with the same name as action method name
+return View("SomeViewName") also
+
+Views in MVC are called Razor view with cshtml extension -> combine C# and HTML code
+
+HTTP Requests ->
+GET => top 30 movies, get user by id, get movies for genre is 3
+POST => Register User, Login
+PUT => Edit Profile
+DELETE => Delete account
+
+Get User Info
+https://localhost:7033/user/details/1
+1. UserController -> Controllers
+2. Create Details action method -> GET
+2. User folder inside Views
+3. Create details.cshtml
+
+
+Organize our code properly
+Code should be reusable cod and easily testable
+
+
+Entities represents your Database tables
+Movie table => Movie class columns will be mapped with properties
+Genre => Genre class
+
+Models/ViewModels/DTO (Data Transfer Objects) => Views
+Home Page => MovieCardModel => PosterUrl, Id, Title
+You create model classes based on the requirement of the View
+
+Repositories class/ interfaces they deal with Entity classes
+Services classes/ interfaces they deal with Model classes
+
+Every View before rendreing, it will inherit view start and => Layout
+
+MovieCard view in multiple views
+Home/index -> MovieCard
+User/purchases => MovieCard
+User/Facorites => MovieCard
+
+Partial View => MovieCardPartail and then u can reuse it across multiple views
+
+Dependency Injection
+Design Pattern that enables you to write loosely coupled code
+
+tightly couple code vs loosely coupled code
+
+easy to maintain
+easy to test
+easy to change the functionality without changing much of the code
+
+method(int x, IMovieService service);
+
+any class/type that implements that interface
+
+var movieService = new MovieService();
+var movieRepo = new MovieRepository(); -->cannot be passed, because in the method, it's IMovieService interface
+method(5, movieService);
+
+HomeController c = new HomeController();
+
+### EF Core Code First Approaach using Migrations
+
+1. Create an Entity that you need based on Table requirement
+2. Establish the connection string, where you want the database to be crreated
+3. Install required libraries from NuGet
+4. DbContext -> Represents your database and DbSet -> represents your table
+5. Create Custom DbContext class that inherits from DbContext base class
+6. Inject DbContextOptions from Program.cs with connection string into DbContext
+7. Create DbSet property inside the DbContext
+8. Add-migration
+9. update-database
+10. Check the SQL Server if the database and table are created
+11. Do not change the Database schema manually, alwasy go from Code and apply new migration
+12. Two ways to model our Code first design
+	i. Data Annotations
+   ii. Fluent API takes precendence
+
+
+
+async/await
+
+Sync vs Async
+
+ASP.NET => when a request come in
+GET => http://movieshop.com/movies/details/22
+
+ASP.NET will have Threadpool => Collection of thread => 10 threads
+
+T1  T2 ... T10
+
+20 requeests at the same time for the same URL or different URL
+t1 to t10 to precess each request
+
+11 the request => 503 error
+prevent thread starvation sceanrio
+
+I/0 =>
+async/await => go together, only await a method that returns a Task
+
+async modifier to the method
+always return a Task
+
+sync          async
+int           Task<int>
+ActionResult  Task<ActionResult>
+void          Task
+
+Server side Pagination
+
+you wanna get Movies by genre
+
+UI => not good UI EXP
+Takes lots of times => SQL server needs to get all the data
+
+
+Authentication & Authorization
+
+public pages/ annonymous user
+1. Home
+2. Movie Details
+3. Cast Details
+4. Login Page
+5. Register Page
+
+1. Buy Movie
+2. Favorite Movie
+3. Review Movie
+4. Get Movie Purchased by user
+5. Get Movie Favorited by user
+
+Admin Functionality
+1. Create Movie
+2, Create Cast
+3. Get Popular Movies from and to dates -> Report data
+
+### Create Register
+1. Create Linkes for Register and Login
+
+
+HttpContext => it will give you all the information regarding the http request
+
+Passwords should always be hased with Salt
+
+U1 -> abc@abc.com (Abc123!! + oierhgrqg) Hash1Alg -> awoevnoawnvwfoiwenfwe
+U2 -> xyx@xyx.com (Abc123!! + aerinfqio) Hash1Alg -> waiuvfhibvqqnvoewjvbo
+
+Encryption (two way) -> Credit Cards, Secret answers, SSN, DL
+vs 
+Hashing (one way) -> Passwords
+
+Login
+U1 -> abc@abc.com    (Abc123!! + oierhgrqg)    Hash1Alg -> awoevnoawnvwfoiwenfwe   == hash stored in database
+Compare hashes
+
+
+Dev OPS
+Developer + Operations
+
+Deploy the application => ASP.NET Core
+
+
+Company A
+Team MovieShop
+
+Environments
+Dev -> Developers have access/test
+QA -> Testers will test
+Staging => UAT()
+
+Production/Live -> Actual Users
+
+
+Windows Machine/server => IIS
+Linux Server -> Ngix
+
+Data Centers => Operations team that will manage those servers
+
+Cloud Providers
+Azure => 
+CPU
+IaaS => Infrasture as a Service, VM => Windows Server with 128G RAM  20 core 5 THD
+IIS => MovieShop App
+
+PaaS Platform as a Service
+Azure APP Service => Deply the App
+Azure SQL
+Azure Blob Storage => Files, images, videos
+Azure CI/CD
+Azure Functions
+Azure Congnitive Services

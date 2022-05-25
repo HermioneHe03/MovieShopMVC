@@ -1,0 +1,28 @@
+﻿@model Application_Core.Models.PagedResultSet<Application_Core.Models.MovieCardModel>
+
+
+	<div class="rounded">
+    <div class="container-fluid">
+        <div class="row">
+            @foreach(var movie in Model.Data)
+            {
+                <div class="col-6 col-lg-3 col-sm-4 col-xl-2">
+                    <partial name="_MovieCard" model="movie" />
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+	
+<nav aria-label = "Page navigation example">
+		<ul class="pagination">
+			@for (var i=1; i<Model.TotalPages+1; i++)
+			{
+			<li class="page-item"><a class="page-link" href="#">
+					@i
+				</a>
+			</li>
+		}
+		</ul>
+	</nav>
